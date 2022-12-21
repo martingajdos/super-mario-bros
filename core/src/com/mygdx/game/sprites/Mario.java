@@ -96,7 +96,8 @@ public class Mario extends Sprite {
         fixtureDef.filter.categoryBits = MarioGameTest.MARIO_BIT;
         // set what kinds of fixtures can Mario collide with (if any of the InteractiveTileObjects fixture filters becomes anything different than this,
         // Mario won't have a collision with that object
-        fixtureDef.filter.maskBits = MarioGameTest.GROUND_BIT | MarioGameTest.COIN_BIT | MarioGameTest.BRICK_BIT;
+        fixtureDef.filter.maskBits = MarioGameTest.GROUND_BIT | MarioGameTest.COIN_BIT | MarioGameTest.BRICK_BIT | MarioGameTest.ENEMY_BIT |
+                MarioGameTest.OBJECT_BIT;
 
         fixtureDef.shape = shape;
 

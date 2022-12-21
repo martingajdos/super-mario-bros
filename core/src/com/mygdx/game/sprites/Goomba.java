@@ -1,5 +1,6 @@
 package com.mygdx.game.sprites;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -13,7 +14,7 @@ public class Goomba extends Enemy {
 
     // set up for animations
     private float stateTime;
-    private Animation walkAnimation;
+    private Animation<TextureRegion> walkAnimation;
     private Array<TextureRegion> frames;
 
     public Goomba(PlayScreen screen, float x, float y) {
@@ -25,6 +26,14 @@ public class Goomba extends Enemy {
         }
         walkAnimation = new Animation(0.4f, frames);
         stateTime = 0;
+
+        setBounds(getX(), getY(), 16 / MarioGameTest.PPM, 16 / MarioGameTest.PPM);
+    }
+
+    public void tick(float dt) {
+        stateTime += dt;
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        setRegion(walkAnimation.getKeyFrame(stateTime, true));
     }
 
     @Override
@@ -47,7 +56,8 @@ public class Goomba extends Enemy {
                                      MarioGameTest.COIN_BIT |
                                      MarioGameTest.BRICK_BIT |
                                      MarioGameTest.ENEMY_BIT |
-                                     MarioGameTest.OBJECT_BIT;
+                                     MarioGameTest.OBJECT_BIT |
+                                     MarioGameTest.MARIO_BIT;
 
         fixtureDef.shape = shape;
 
