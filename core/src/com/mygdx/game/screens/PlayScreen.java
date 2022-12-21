@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MarioGameTest;
+import com.mygdx.game.gui.Hud;
 import com.mygdx.game.sprites.Mario;
 import com.mygdx.game.tools.B2WorldCreator;
 import com.mygdx.game.tools.WorldContactListener;
@@ -39,9 +40,12 @@ public class PlayScreen implements Screen {
 
     private TextureAtlas atlas;
 
+    private Hud hud;
+
     public PlayScreen(MarioGameTest game) {
         this.atlas = new TextureAtlas("Mario_and_Enemies.pack");
         this.game = game;
+        this.hud = new Hud(game.batch);
         camera = new OrthographicCamera();
         gamePort = new FitViewport(MarioGameTest.V_WIDTH / MarioGameTest.PPM, MarioGameTest.V_HEIGHT / MarioGameTest.PPM, camera);
 
@@ -128,7 +132,9 @@ public class PlayScreen implements Screen {
         {
             renderer.render();
             box2DDebugRenderer.render(world, camera.combined);
-            //render hud
+
+            game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+            hud.stage.draw();
 
             game.batch.setProjectionMatrix(camera.combined);
             game.batch.begin();
