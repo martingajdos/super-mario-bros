@@ -27,6 +27,8 @@ public abstract class Enemy extends Sprite {
 
     public abstract void hitOnHead();
 
+    public abstract void tick(float dt);
+
     // reverses velocity (so that we can make the enemy pace back and forth)
     public void reverseVelocity(boolean x, boolean y) {
         if (x) {

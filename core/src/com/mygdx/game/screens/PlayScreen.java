@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MarioGameTest;
 import com.mygdx.game.gui.Hud;
+import com.mygdx.game.sprites.Enemy;
 import com.mygdx.game.sprites.Goomba;
 import com.mygdx.game.sprites.Mario;
 import com.mygdx.game.tools.B2WorldCreator;
@@ -46,8 +47,7 @@ public class PlayScreen implements Screen {
 
     private Music music;
 
-    // temp enemy
-    private Goomba goomba;
+    private B2WorldCreator worldCreator;
 
     public PlayScreen(MarioGameTest game) {
         this.atlas = new TextureAtlas("Mario_and_Enemies.pack");
@@ -61,7 +61,7 @@ public class PlayScreen implements Screen {
         camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         initBox2dStuff();
-        new B2WorldCreator(this);
+        worldCreator = new B2WorldCreator(this);
 
         player = new Mario(this);
 
@@ -72,8 +72,6 @@ public class PlayScreen implements Screen {
         music.setLooping(true);
         music.setVolume(0.05f);
         //music.play();
-
-        goomba = new Goomba(this, 5.64f, .32f);
     }
 
     public TextureAtlas getAtlas() {
@@ -99,7 +97,11 @@ public class PlayScreen implements Screen {
         handleInput(dt);
         world.step(1 / 60f, 6, 2);
         player.tick(dt);
-        goomba.tick(dt);
+
+        for (Enemy enemy : worldCreator.getGoombas()) {
+            enemy.tick(dt);
+        }
+
         hud.tick(dt);
 
 //        tx = player.body.getPosition().x-(camera.viewportWidth/2)/MarioGameTest.PPM+player.getWidth()/2;
@@ -159,7 +161,9 @@ public class PlayScreen implements Screen {
             game.batch.begin();
 
             player.draw(game.batch);
-            goomba.draw(game.batch);
+            for (Enemy enemy : worldCreator.getGoombas()) {
+                enemy.draw(game.batch);
+            }
 
             game.batch.end();
         }
