@@ -36,21 +36,8 @@ public class B2WorldCreator {
         Body body;
 
         // Go through all the objects in the map, that are of RectangleMapObject type and are in the 2.nd layer
-        for (MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
-            // Get a particular rectangle from the current object
-            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
 
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set((rectangle.getX() + rectangle.getWidth() / 2) / MarioGameTest.PPM,
-                    (rectangle.getY() + rectangle.getHeight() / 2) / MarioGameTest.PPM);
-
-            body = world.createBody(bodyDef);
-
-            shape.setAsBox(rectangle.getWidth()/2/ MarioGameTest.PPM,rectangle.getHeight()/2/ MarioGameTest.PPM);
-            fixtureDef.shape = shape;
-            body.createFixture(fixtureDef);
-        }
-
+        // GROUND
         for (RectangleMapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
 
@@ -62,6 +49,7 @@ public class B2WorldCreator {
 
             shape.setAsBox(rectangle.getWidth()/2/ MarioGameTest.PPM,rectangle.getHeight()/2/ MarioGameTest.PPM);
             fixtureDef.shape = shape;
+            fixtureDef.filter.categoryBits = MarioGameTest.OBJECT_BIT;
             body.createFixture(fixtureDef);
         }
 

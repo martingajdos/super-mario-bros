@@ -100,6 +100,9 @@ public class PlayScreen implements Screen {
 
         for (Enemy enemy : worldCreator.getGoombas()) {
             enemy.tick(dt);
+            if (enemy.getX() < player.getX() + Enemy.ACTIVATE_BODY) {
+                enemy.body.setActive(true);
+            }
         }
 
         hud.tick(dt);

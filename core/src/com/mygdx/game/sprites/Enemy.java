@@ -4,9 +4,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.MarioGameTest;
 import com.mygdx.game.screens.PlayScreen;
 
 public abstract class Enemy extends Sprite {
+    public static final float ACTIVATE_BODY = 224 / MarioGameTest.PPM;
+
     protected World world;
     protected PlayScreen screen;
 
@@ -21,6 +24,7 @@ public abstract class Enemy extends Sprite {
         defineEnemy();
 
         velocity = new Vector2(1, 0);
+        body.setActive(false);
     }
 
     protected abstract void defineEnemy();
