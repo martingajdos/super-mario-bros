@@ -3,6 +3,7 @@ package com.mygdx.game.sprites;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MarioGameTest;
@@ -94,6 +95,14 @@ public class Mario extends Sprite {
 
         // Create the fixture in body
         body.createFixture(fixtureDef);
+
+        // create Mario's head (for collision with objects, line between 2 points)
+        EdgeShape head = new EdgeShape();
+        head.set(new Vector2(-2 / MarioGameTest.PPM, 6 / MarioGameTest.PPM),
+                  new Vector2(2 / MarioGameTest.PPM, 6 / MarioGameTest.PPM));
+        fixtureDef.shape = head;
+        fixtureDef.isSensor = true; // it no longer collides within the box2d world
+        body.createFixture(fixtureDef).setUserData("head");
     }
 
     public void tick(float dt) {

@@ -13,6 +13,9 @@ public abstract class InteractiveTileObject {
     protected Rectangle bounds;
     protected Body body;
 
+    // tile's fixture
+    protected Fixture fixture;
+
     public InteractiveTileObject(World world, TiledMap map, Rectangle bounds) {
         this.world = world;
         this.map = map;
@@ -30,6 +33,9 @@ public abstract class InteractiveTileObject {
 
         shape.setAsBox(bounds.getWidth()/2/ MarioGameTest.PPM,bounds.getHeight()/2/ MarioGameTest.PPM);
         fixtureDef.shape = shape;
-        body.createFixture(fixtureDef);
+        // capture a tile's fixture into a variable so that we can access it later
+        fixture = body.createFixture(fixtureDef);
     }
+
+    public abstract void onHeadHit();
 }

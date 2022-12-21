@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MarioGameTest;
 import com.mygdx.game.sprites.Mario;
 import com.mygdx.game.tools.B2WorldCreator;
+import com.mygdx.game.tools.WorldContactListener;
 
 public class PlayScreen implements Screen {
 
@@ -52,6 +53,9 @@ public class PlayScreen implements Screen {
         new B2WorldCreator(world, map);
 
         player = new Mario(world, this);
+
+        // set contact listener
+        world.setContactListener(new WorldContactListener());
     }
 
     public TextureAtlas getAtlas() {
