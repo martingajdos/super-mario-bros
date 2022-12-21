@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.PlayScreen;
 
@@ -16,11 +19,25 @@ public class MarioGameTest extends Game {
 	public static final short COIN_BIT = 8;
 	public static final short DESTROYED_BIT = 16;
 
+	// for managing sounds and music, we use AssetManager (not recommended to be used statically, oh well ;) )
+	public static AssetManager manager;
+
 	public SpriteBatch batch;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+
+		// load up all the sound and music files
+		manager = new AssetManager();
+		manager.load("audio/music/mario_music.ogg", Music.class);
+		manager.load("audio/sounds/coin.wav", Sound.class);
+		manager.load("audio/sounds/bump.wav", Sound.class);
+		manager.load("audio/sounds/breakblock.wav", Sound.class);
+
+		// Async loading, blocks everything until assets are loaded
+		manager.finishLoading();
+
 		this.setScreen(new PlayScreen(this));
 	}
 
@@ -31,5 +48,8 @@ public class MarioGameTest extends Game {
 	
 	@Override
 	public void dispose () {
+		super.dispose();
+		manager.dispose();
+		batch.dispose();
 	}
 }

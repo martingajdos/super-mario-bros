@@ -1,6 +1,7 @@
 package com.mygdx.game.sprites;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;
@@ -31,6 +32,12 @@ public class Coin extends InteractiveTileObject {
     @Override
     public void onHeadHit() {
         Gdx.app.log("Coin", "Collision");
+
+        if (getCell().getTile().getId() == BLANK_COIN) {
+            MarioGameTest.manager.get("audio/sounds/bump.wav", Sound.class).play();
+        } else {
+            MarioGameTest.manager.get("audio/sounds/coin.wav", Sound.class).play();
+        }
 
         // after Mario head collision, change the sprite of this object to BLANK COIN, which we
         // fetched from the spritesheet - tileset_gutter

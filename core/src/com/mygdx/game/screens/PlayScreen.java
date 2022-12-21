@@ -3,6 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -42,6 +43,8 @@ public class PlayScreen implements Screen {
 
     private Hud hud;
 
+    private Music music;
+
     public PlayScreen(MarioGameTest game) {
         this.atlas = new TextureAtlas("Mario_and_Enemies.pack");
         this.game = game;
@@ -60,6 +63,10 @@ public class PlayScreen implements Screen {
 
         // set contact listener
         world.setContactListener(new WorldContactListener());
+
+        music = MarioGameTest.manager.get("audio/music/mario_music.ogg", Music.class);
+        music.setLooping(true);
+        //music.play();
     }
 
     public TextureAtlas getAtlas() {
