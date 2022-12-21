@@ -73,7 +73,7 @@ public class PlayScreen implements Screen {
         music.setVolume(0.05f);
         //music.play();
 
-        goomba = new Goomba(this, .600f, .32f);
+        goomba = new Goomba(this, 5.64f, .32f);
     }
 
     public TextureAtlas getAtlas() {
@@ -118,7 +118,7 @@ public class PlayScreen implements Screen {
     float maxVel = 2;
 
     private void handleInput(float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
             player.body.applyLinearImpulse(new Vector2(0, jsp), player.body.getWorldCenter(), true);
         }
 

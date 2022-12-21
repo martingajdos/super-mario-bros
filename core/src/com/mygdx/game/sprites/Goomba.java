@@ -2,6 +2,7 @@ package com.mygdx.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -41,14 +42,18 @@ public class Goomba extends Enemy {
     public void tick(float dt) {
         stateTime += dt;
 
+        // destroy the body
         if (setToDestroy && !destroyed) {
             world.destroyBody(body);
             destroyed = true;
             setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
+            stateTime = 0;
         } else if (!destroyed) {
 
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
             setRegion(walkAnimation.getKeyFrame(stateTime, true));
+
+            body.setLinearVelocity(this.velocity);
         }
     }
 
@@ -75,7 +80,7 @@ public class Goomba extends Enemy {
         fixtureDef.shape = shape;
 
         // Create the fixture in body
-        body.createFixture(fixtureDef);
+        body.createFixture(fixtureDef).setUserData(this);
 
         // create the Goomba's head (so that Mario can jump on it)
         PolygonShape head = new PolygonShape();
@@ -93,6 +98,14 @@ public class Goomba extends Enemy {
         fixtureDef.filter.categoryBits = MarioGameTest.ENEMY_HEAD_BIT;
         // creating the fixture of a Goomba's head & setting the user data, so that we have access to this class during collision
         body.createFixture(fixtureDef).setUserData(this);
+    }
+
+    // we are overriding the Sprite's draw method to be able to not draw the goomba after it's destroyed
+    @Override
+    public void draw(Batch batch) {
+        if (!destroyed || stateTime < 1) {
+            super.draw(batch);
+        }
     }
 
     @Override

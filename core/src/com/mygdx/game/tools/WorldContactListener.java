@@ -1,5 +1,6 @@
 package com.mygdx.game.tools;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.MarioGameTest;
 import com.mygdx.game.sprites.Enemy;
@@ -34,12 +35,27 @@ public class WorldContactListener implements ContactListener {
         }
 
         switch (cDef) {
+            // COLLISION: Mario stomp on Enemy head
             case MarioGameTest.ENEMY_HEAD_BIT | MarioGameTest.MARIO_BIT:
                 if (fixtureA.getFilterData().categoryBits == MarioGameTest.ENEMY_HEAD_BIT) {
                     ((Enemy) fixtureA.getUserData()).hitOnHead();
-                } else if (fixtureB.getFilterData().categoryBits == MarioGameTest.ENEMY_HEAD_BIT) {
+                } else {
                     ((Enemy) fixtureB.getUserData()).hitOnHead();
                 }
+                break;
+
+            // COLLISION: Enemy collides with an Object (Wall, Pipe, ...)
+            case MarioGameTest.ENEMY_BIT | MarioGameTest.OBJECT_BIT:
+                if (fixtureA.getFilterData().categoryBits == MarioGameTest.ENEMY_BIT) {
+                    ((Enemy) fixtureA.getUserData()).reverseVelocity(true, false);
+                } else {
+                    ((Enemy) fixtureB.getUserData()).reverseVelocity(true, false);
+                }
+                break;
+
+            // COLLISION: Mario collides with the Enemy
+            case MarioGameTest.MARIO_BIT | MarioGameTest.ENEMY_BIT:
+                Gdx.app.log("MARIO", "DIED");
                 break;
         }
     }
