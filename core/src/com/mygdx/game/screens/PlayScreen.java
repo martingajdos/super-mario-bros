@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -35,7 +36,10 @@ public class PlayScreen implements Screen {
 
     private Mario player;
 
+    private TextureAtlas atlas;
+
     public PlayScreen(MarioGameTest game) {
+        this.atlas = new TextureAtlas("Mario_and_Enemies.atlas");
         this.game = game;
         camera = new OrthographicCamera();
         gamePort = new FitViewport(MarioGameTest.V_WIDTH / MarioGameTest.PPM, MarioGameTest.V_HEIGHT / MarioGameTest.PPM, camera);
@@ -47,7 +51,11 @@ public class PlayScreen implements Screen {
         initBox2dStuff();
         new B2WorldCreator(world, map);
 
-        player = new Mario(world);
+        player = new Mario(world, this);
+    }
+
+    public TextureAtlas getAtlas() {
+        return atlas;
     }
 
     private void initMapStuff() {
@@ -68,6 +76,7 @@ public class PlayScreen implements Screen {
     private void tick(float dt) {
         handleInput(dt);
         world.step(1 / 60f, 6, 2);
+        player.tick(dt);
 
         tx = player.body.getPosition().x-(camera.viewportWidth/2)/MarioGameTest.PPM+player.getWidth()/2;
         ty = player.body.getPosition().y-(camera.viewportHeight/2)/MarioGameTest.PPM+player.getHeight()/2;
@@ -114,6 +123,13 @@ public class PlayScreen implements Screen {
             renderer.render();
             box2DDebugRenderer.render(world, camera.combined);
             //render hud
+
+            game.batch.setProjectionMatrix(camera.combined);
+            game.batch.begin();
+
+            player.draw(game.batch);
+
+            game.batch.end();
         }
     }
 
