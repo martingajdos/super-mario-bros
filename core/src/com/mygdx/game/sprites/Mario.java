@@ -91,6 +91,13 @@ public class Mario extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / MarioGameTest.PPM);
+
+        // set Mario's fixture category to MARIO_BIT (2)
+        fixtureDef.filter.categoryBits = MarioGameTest.MARIO_BIT;
+        // set what kinds of fixtures can Mario collide with (if any of the InteractiveTileObjects fixture filters becomes anything different than this,
+        // Mario won't have a collision with that object
+        fixtureDef.filter.maskBits = MarioGameTest.DEFAULT_BIT | MarioGameTest.COIN_BIT | MarioGameTest.BRICK_BIT;
+
         fixtureDef.shape = shape;
 
         // Create the fixture in body
