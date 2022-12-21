@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.MarioGameTest;
+import com.mygdx.game.gui.Hud;
 
 public class Brick extends InteractiveTileObject {
     public Brick(World world, TiledMap map, Rectangle bounds) {
@@ -29,5 +30,8 @@ public class Brick extends InteractiveTileObject {
         // we get the particular cell which we collided with (getCell), that returns back the TiledMapTileLayer object
         // and on that object, we can set a particular Tile to something (in this case NULL removes it)
         getCell().setTile(null);
+
+        // add 200 to our score
+        Hud.addScore(200);
     }
 }

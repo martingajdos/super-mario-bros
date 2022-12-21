@@ -7,23 +7,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MarioGameTest;
 
-public class Hud {
+public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
 
-    private Integer worldTimer, score;
+    private Integer worldTimer;
+    private static Integer score;
     private float timeCount;
 
     Label countdownLabel,
-          scoreLabel,
           timeLabel,
           levelLabel,
           worldLabel,
           marioLabel;
+
+    static Label scoreLabel;
 
     public Hud(SpriteBatch spriteBatch) {
         worldTimer = 300;
@@ -52,5 +55,28 @@ public class Hud {
         table.add(countdownLabel).expandX();
 
         stage.addActor(table);
+    }
+
+    public void tick(float dt) {
+
+        // Time count will decrease every second (we call this method in PlayScreen tick())
+        timeCount += dt;
+        if (timeCount >= 1) {
+            // subtract 1 second
+            worldTimer--;
+            // redraw the label
+            countdownLabel.setText(String.format("%03d", worldTimer));
+            timeCount = 0;
+        }
+    }
+
+    public static void addScore(int value) {
+        score += value;
+        scoreLabel.setText(String.format("%06d", score));
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
     }
 }

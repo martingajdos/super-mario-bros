@@ -85,6 +85,7 @@ public class PlayScreen implements Screen {
         handleInput(dt);
         world.step(1 / 60f, 6, 2);
         player.tick(dt);
+        hud.tick(dt);
 
 //        tx = player.body.getPosition().x-(camera.viewportWidth/2)/MarioGameTest.PPM+player.getWidth()/2;
 //        ty = player.body.getPosition().y-(camera.viewportHeight/2)/MarioGameTest.PPM+player.getHeight()/2;
@@ -171,5 +172,6 @@ public class PlayScreen implements Screen {
         renderer.dispose();
         world.dispose();
         box2DDebugRenderer.dispose();
+        hud.dispose();
     }
 }
