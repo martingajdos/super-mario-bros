@@ -61,6 +61,7 @@ public class B2WorldCreator {
             body.createFixture(fixtureDef);
         }
 
+        // PIPES
         for (RectangleMapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
 
@@ -72,14 +73,19 @@ public class B2WorldCreator {
 
             shape.setAsBox(rectangle.getWidth()/2/ MarioGameTest.PPM,rectangle.getHeight()/2/ MarioGameTest.PPM);
             fixtureDef.shape = shape;
+
+            // category bit for the pipes' fixture filter, because we want for ex. enemy to collide with the pipe and reverse direction
+            fixtureDef.filter.categoryBits = MarioGameTest.OBJECT_BIT;
             body.createFixture(fixtureDef);
         }
 
+        // COINS
         for (RectangleMapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
             new Coin(screen, rectangle);
         }
 
+        // BRICKS
         for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
             new Brick(screen, rectangle);
