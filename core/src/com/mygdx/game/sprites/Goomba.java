@@ -19,6 +19,9 @@ public class Goomba extends Enemy {
     private Animation<TextureRegion> walkAnimation;
     private Array<TextureRegion> frames;
 
+    private boolean setToDestroy;
+    private boolean destroyed;
+
     public Goomba(PlayScreen screen, float x, float y) {
         super(screen, x, y);
 
@@ -30,12 +33,23 @@ public class Goomba extends Enemy {
         stateTime = 0;
 
         setBounds(getX(), getY(), 16 / MarioGameTest.PPM, 16 / MarioGameTest.PPM);
+
+        setToDestroy = false;
+        destroyed = false;
     }
 
     public void tick(float dt) {
         stateTime += dt;
-        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-        setRegion(walkAnimation.getKeyFrame(stateTime, true));
+
+        if (setToDestroy && !destroyed) {
+            world.destroyBody(body);
+            destroyed = true;
+            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
+        } else if (!destroyed) {
+
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+            setRegion(walkAnimation.getKeyFrame(stateTime, true));
+        }
     }
 
     @Override
@@ -53,13 +67,10 @@ public class Goomba extends Enemy {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / MarioGameTest.PPM);
 
+        // Fixture category bits and mask bits
         fixtureDef.filter.categoryBits = MarioGameTest.ENEMY_BIT;
-        fixtureDef.filter.maskBits = MarioGameTest.GROUND_BIT |
-                                     MarioGameTest.COIN_BIT |
-                                     MarioGameTest.BRICK_BIT |
-                                     MarioGameTest.ENEMY_BIT |
-                                     MarioGameTest.OBJECT_BIT |
-                                     MarioGameTest.MARIO_BIT;
+        fixtureDef.filter.maskBits = MarioGameTest.GROUND_BIT | MarioGameTest.COIN_BIT | MarioGameTest.BRICK_BIT |
+                MarioGameTest.ENEMY_BIT | MarioGameTest.OBJECT_BIT | MarioGameTest.MARIO_BIT;
 
         fixtureDef.shape = shape;
 
@@ -82,5 +93,10 @@ public class Goomba extends Enemy {
         fixtureDef.filter.categoryBits = MarioGameTest.ENEMY_HEAD_BIT;
         // creating the fixture of a Goomba's head & setting the user data, so that we have access to this class during collision
         body.createFixture(fixtureDef).setUserData(this);
+    }
+
+    @Override
+    public void hitOnHead() {
+        setToDestroy = true;
     }
 }

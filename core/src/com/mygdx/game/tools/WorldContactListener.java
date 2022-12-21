@@ -1,6 +1,8 @@
 package com.mygdx.game.tools;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.MarioGameTest;
+import com.mygdx.game.sprites.Enemy;
 import com.mygdx.game.sprites.InteractiveTileObject;
 
 public class WorldContactListener implements ContactListener {
@@ -11,6 +13,8 @@ public class WorldContactListener implements ContactListener {
         // get colliding fixtures
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
+
+        int cDef = fixtureA.getFilterData().categoryBits | fixtureB.getFilterData().categoryBits;
 
         // check if the collision is between an object and Mario's head
         if (fixtureA.getUserData() == "head" || fixtureB.getUserData() == "head") {
@@ -27,6 +31,16 @@ public class WorldContactListener implements ContactListener {
                 // execute the head hit method of the interactive tile object
                 ((InteractiveTileObject) object.getUserData()).onHeadHit();
             }
+        }
+
+        switch (cDef) {
+            case MarioGameTest.ENEMY_HEAD_BIT | MarioGameTest.MARIO_BIT:
+                if (fixtureA.getFilterData().categoryBits == MarioGameTest.ENEMY_HEAD_BIT) {
+                    ((Enemy) fixtureA.getUserData()).hitOnHead();
+                } else if (fixtureB.getFilterData().categoryBits == MarioGameTest.ENEMY_HEAD_BIT) {
+                    ((Enemy) fixtureB.getUserData()).hitOnHead();
+                }
+                break;
         }
     }
 

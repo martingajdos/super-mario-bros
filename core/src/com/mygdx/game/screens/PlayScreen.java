@@ -73,7 +73,7 @@ public class PlayScreen implements Screen {
         music.setVolume(0.05f);
         //music.play();
 
-        goomba = new Goomba(this, .32f, .32f);
+        goomba = new Goomba(this, .600f, .32f);
     }
 
     public TextureAtlas getAtlas() {
