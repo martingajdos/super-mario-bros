@@ -39,7 +39,7 @@ public class PlayScreen implements Screen {
     private TextureAtlas atlas;
 
     public PlayScreen(MarioGameTest game) {
-        this.atlas = new TextureAtlas("Mario_and_Enemies.atlas");
+        this.atlas = new TextureAtlas("Mario_and_Enemies.pack");
         this.game = game;
         camera = new OrthographicCamera();
         gamePort = new FitViewport(MarioGameTest.V_WIDTH / MarioGameTest.PPM, MarioGameTest.V_HEIGHT / MarioGameTest.PPM, camera);
@@ -78,10 +78,12 @@ public class PlayScreen implements Screen {
         world.step(1 / 60f, 6, 2);
         player.tick(dt);
 
-        tx = player.body.getPosition().x-(camera.viewportWidth/2)/MarioGameTest.PPM+player.getWidth()/2;
-        ty = player.body.getPosition().y-(camera.viewportHeight/2)/MarioGameTest.PPM+player.getHeight()/2;
-        camera.position.x += (tx-camera.position.x)*constant;
-        camera.position.y += (ty-camera.position.y)*constant;
+//        tx = player.body.getPosition().x-(camera.viewportWidth/2)/MarioGameTest.PPM+player.getWidth()/2;
+//        ty = player.body.getPosition().y-(camera.viewportHeight/2)/MarioGameTest.PPM+player.getHeight()/2;
+//        camera.position.x += (tx-camera.position.x)*constant;
+//        camera.position.y += (ty-camera.position.y)*constant;
+
+        camera.position.x = player.body.getPosition().x;
 
         camera.update();
         renderer.setView(camera);

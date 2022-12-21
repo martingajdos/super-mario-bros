@@ -1,12 +1,36 @@
 package com.mygdx.game.sprites;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MarioGameTest;
 import com.mygdx.game.screens.PlayScreen;
 
 public class Mario extends Sprite {
+
+    // States
+    public enum State {
+        FALLING,
+        JUMPING,
+        STANDING,
+        RUNNING
+    }
+
+    public State currentState;
+    public State previousState;
+
+    // Animations
+    private Animation marioRun;
+    private Animation marioJump;
+
+    // For animations to determine to flip
+    private boolean runningRight;
+
+    // Counts any given time in a state
+    private float stateTimer;
+
     public World world;
     public Body body;
     private TextureRegion marioStand;
@@ -14,10 +38,37 @@ public class Mario extends Sprite {
     public Mario(World world, PlayScreen screen) {
         super(screen.getAtlas().findRegion("little_mario"));
         this.world = world;
+
+        // init states
+        currentState = State.STANDING;
+        previousState = State.STANDING;
+        stateTimer = 0;
+        runningRight = true;
+
+        // load animations
+        // create an array of texture regions to pass to constructor
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        // first running texture starts at 16px, so that's why for loop i = 1 => 1*16 = 16
+        // running animation ends at the position of a texture that is 4
+        for (int i = 1; i < 4; i++) {
+            frames.add(new TextureRegion(getTexture(), i * 16, 10, 16, 16));
+        }
+
+        // create the run animation with those frames we loaded (0.1f - duration)
+        marioRun = new Animation(0.1f, frames);
+        // clear the array since we already loaded run animation. Jump anim. will be next (4 - 5)
+        frames.clear();
+
+        for (int i = 4; i < 6; i++) {
+            frames.add(new TextureRegion(getTexture(), i * 16, 10, 16, 16));
+        }
+        marioJump = new Animation(0.1f, frames);
+
         defineMario();
 
         // get first sprite from the implemented Sprite texture, 16 by 16 wide
-        marioStand = new TextureRegion(getTexture(), 0, 0, 16, 16);
+        marioStand = new TextureRegion(getTexture(), 0, 10, 16, 16);
 
         // Sets the position and size of the sprite when drawn, before scaling and rotation are applied.
         setBounds(0, 0, 16 / MarioGameTest.PPM, 16 / MarioGameTest.PPM);
@@ -49,7 +100,65 @@ public class Mario extends Sprite {
         // set the position of the texture
         // body.getPosition().x - pos of fixture
         // getWidth() - width of the sprite (because of extending the sprite) - parent class
-        setPosition(body.getPosition().x - ((getWidth() / 2) + 2 / MarioGameTest.PPM),
-                body.getPosition().y - ((getHeight() / 2) - 1 / MarioGameTest.PPM));
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+
+//        setPosition(body.getPosition().x - ((getWidth() / 2) + 2 / MarioGameTest.PPM),
+//                body.getPosition().y - ((getHeight() / 2) - 1 / MarioGameTest.PPM));
+
+        setRegion(getFrame(dt));
+    }
+
+    // returns appropriate texture to render during animation
+    private TextureRegion getFrame(float dt) {
+        currentState = getState();
+
+        // set a texture region according to Mario's state
+        TextureRegion region;
+
+        switch (currentState) {
+            case JUMPING:
+                region = (TextureRegion) marioJump.getKeyFrame(stateTimer);
+                break;
+            case RUNNING:
+                // true there means loop it
+                region = (TextureRegion) marioRun.getKeyFrame(stateTimer, true);
+                break;
+            case FALLING:
+            case STANDING:
+            default:
+                region = marioStand;
+                break;
+        }
+
+        // if he's running to the left and the texture is not flipped left, flip it left
+        if ((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
+            region.flip(true, false);
+            runningRight = false;
+        } else if ((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
+            region.flip(true, false);
+            runningRight = true;
+        }
+
+        // if the current state doesnt equal to the previous state (we change states), add deltaTime to the stateTimer, else it's 0
+        stateTimer = currentState == previousState ? stateTimer + dt : 0;
+
+        // set previous state to the current one
+        previousState = currentState;
+
+        // return the TextureRegion which is adequate
+        return region;
+    }
+
+    private State getState() {
+        // checking the velocities and determining the state
+        if (body.getLinearVelocity().y > 0 || (body.getLinearVelocity().y < 0 && previousState == State.JUMPING)) {
+            return State.JUMPING;
+        } else if (body.getLinearVelocity().y < 0) {
+            return State.FALLING;
+        } else if (body.getLinearVelocity().x != 0) {
+            return State.RUNNING;
+        } else {
+            return State.STANDING;
+        }
     }
 }

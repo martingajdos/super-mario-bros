@@ -6,7 +6,7 @@ import com.mygdx.game.screens.PlayScreen;
 
 public class MarioGameTest extends Game {
 	public static final int FRAMES = 60;
-	public static final int V_WIDTH = 300, V_HEIGHT = 208;
+	public static final int V_WIDTH = 400, V_HEIGHT = 208;
 	public static final float PPM = 100;
 
 	public SpriteBatch batch;

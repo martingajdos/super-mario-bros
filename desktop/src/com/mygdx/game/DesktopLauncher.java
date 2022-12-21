@@ -8,7 +8,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
 		config.setForegroundFPS(MarioGameTest.FRAMES);
-		config.setWindowedMode(MarioGameTest.V_WIDTH * 2, MarioGameTest.V_HEIGHT * 2);
+		config.setWindowedMode(MarioGameTest.V_WIDTH * 3, MarioGameTest.V_HEIGHT * 3);
 		config.setTitle("LD58");
 		config.setResizable(false);
 
