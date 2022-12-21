@@ -66,6 +66,7 @@ public class PlayScreen implements Screen {
 
         music = MarioGameTest.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
+        music.setVolume(0.05f);
         //music.play();
     }
 
@@ -138,12 +139,15 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(100.0f / 255.0f, 172.0f / 255.0f, 254.0f / 255.0f, 1.0f);
 
         {
+            // render world and debug
             renderer.render();
             box2DDebugRenderer.render(world, camera.combined);
 
+            // render hud
             game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
             hud.stage.draw();
 
+            // render player
             game.batch.setProjectionMatrix(camera.combined);
             game.batch.begin();
 
