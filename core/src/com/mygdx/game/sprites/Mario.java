@@ -36,9 +36,9 @@ public class Mario extends Sprite {
     public Body body;
     private TextureRegion marioStand;
 
-    public Mario(World world, PlayScreen screen) {
+    public Mario(PlayScreen screen) {
         super(screen.getAtlas().findRegion("little_mario"));
-        this.world = world;
+        this.world = screen.getWorld();
 
         // init states
         currentState = State.STANDING;

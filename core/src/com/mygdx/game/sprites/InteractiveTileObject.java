@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.MarioGameTest;
+import com.mygdx.game.screens.PlayScreen;
 
 public abstract class InteractiveTileObject {
     protected World world;
@@ -17,9 +18,9 @@ public abstract class InteractiveTileObject {
     // tile's fixture
     protected Fixture fixture;
 
-    public InteractiveTileObject(World world, TiledMap map, Rectangle bounds) {
-        this.world = world;
-        this.map = map;
+    public InteractiveTileObject(PlayScreen screen, Rectangle bounds) {
+        this.world = screen.getWorld();
+        this.map = screen.getMap();
         this.bounds = bounds;
 
         BodyDef bodyDef = new BodyDef();

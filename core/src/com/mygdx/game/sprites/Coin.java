@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.MarioGameTest;
 import com.mygdx.game.gui.Hud;
+import com.mygdx.game.screens.PlayScreen;
 
 public class Coin extends InteractiveTileObject {
     // fetch the actual whole tileset (sprite sheet) to be accessible in the Coin object
@@ -17,8 +18,8 @@ public class Coin extends InteractiveTileObject {
     // ID of the sprite within the tileSet (look it up through Tiled) for the blank coin
     private final int BLANK_COIN = 28;
 
-    public Coin(World world, TiledMap map, Rectangle bounds) {
-        super(world, map, bounds);
+    public Coin(PlayScreen screen, Rectangle bounds) {
+        super(screen, bounds);
         // set coin's fixture user data to this class (we can reference a tile by class then)
         fixture.setUserData(this);
 

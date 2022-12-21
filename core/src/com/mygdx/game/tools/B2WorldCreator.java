@@ -6,15 +6,19 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.MarioGameTest;
+import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Brick;
 import com.mygdx.game.sprites.Coin;
 
 public class B2WorldCreator {
-    public B2WorldCreator(World world, TiledMap map) {
-        initBox2D(world, map);
+    public B2WorldCreator(PlayScreen screen) {
+        initBox2D(screen);
     }
 
-    private void initBox2D(World world, TiledMap map) {
+    private void initBox2D(PlayScreen screen) {
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
+
         // Before creating a body, we need to define it with BodyDef
         BodyDef bodyDef = new BodyDef();
 
@@ -73,12 +77,12 @@ public class B2WorldCreator {
 
         for (RectangleMapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
-            new Coin(world, map, rectangle);
+            new Coin(screen, rectangle);
         }
 
         for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
-            new Brick(world, map, rectangle);
+            new Brick(screen, rectangle);
         }
     }
 }

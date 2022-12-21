@@ -57,9 +57,9 @@ public class PlayScreen implements Screen {
         camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         initBox2dStuff();
-        new B2WorldCreator(world, map);
+        new B2WorldCreator(this);
 
-        player = new Mario(world, this);
+        player = new Mario(this);
 
         // set contact listener
         world.setContactListener(new WorldContactListener());
@@ -151,6 +151,14 @@ public class PlayScreen implements Screen {
 
             game.batch.end();
         }
+    }
+
+    public TiledMap getMap() {
+        return map;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     @Override
