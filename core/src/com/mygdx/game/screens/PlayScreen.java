@@ -107,35 +107,20 @@ public class PlayScreen implements Screen {
 
         hud.tick(dt);
 
-//        tx = player.body.getPosition().x-(camera.viewportWidth/2)/MarioGameTest.PPM+player.getWidth()/2;
-//        ty = player.body.getPosition().y-(camera.viewportHeight/2)/MarioGameTest.PPM+player.getHeight()/2;
-//        camera.position.x += (tx-camera.position.x)*constant;
-//        camera.position.y += (ty-camera.position.y)*constant;
+        tx = player.body.getPosition().x - (camera.viewportWidth / 2) / MarioGameTest.PPM + player.getWidth() / 2;
+        ty = player.body.getPosition().y - (camera.viewportHeight / 2) / MarioGameTest.PPM + player.getHeight() / 2;
+        camera.position.x += (tx - camera.position.x - 4 / MarioGameTest.PPM) * constant;
+        camera.position.y += (ty - camera.position.y) * constant;
 
-        camera.position.x = player.body.getPosition().x;
+//        camera.position.x = player.body.getPosition().x;
 
         camera.update();
         renderer.setView(camera);
     }
 
-    float jsp = 4f;
-    float ssp = 0.1f;
-    float maxVel = 2;
 
     private void handleInput(float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
-            player.body.applyLinearImpulse(new Vector2(0, jsp), player.body.getWorldCenter(), true);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && player.body.getLinearVelocity().x <= maxVel) {
-            player.body.applyLinearImpulse(new Vector2(ssp, 0), player.body.getWorldCenter(), true);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && player.body.getLinearVelocity().x >= -maxVel) {
-            player.body.applyLinearImpulse(new Vector2(-ssp, 0), player.body.getWorldCenter(), true);
-        }
-
-
+        player.getPlayerInput();
     }
 
     @Override
@@ -153,11 +138,11 @@ public class PlayScreen implements Screen {
         {
             // render world and debug
             renderer.render();
-            box2DDebugRenderer.render(world, camera.combined);
+//            box2DDebugRenderer.render(world, camera.combined);
 
             // render hud
             game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-            hud.stage.draw();
+//            hud.stage.draw();
 
             // render player
             game.batch.setProjectionMatrix(camera.combined);

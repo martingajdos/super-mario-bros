@@ -1,5 +1,7 @@
 package com.mygdx.game.sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,9 +38,15 @@ public class Mario extends Sprite {
     public Body body;
     private TextureRegion marioStand;
 
+    private boolean isJumping;
+    float jsp = 4f;
+    float ssp = 0.1f;
+    float maxVel = 2;
+
     public Mario(PlayScreen screen) {
         super(screen.getAtlas().findRegion("little_mario"));
         this.world = screen.getWorld();
+        isJumping = false;
 
         // init states
         currentState = State.STANDING;
@@ -177,5 +185,31 @@ public class Mario extends Sprite {
         } else {
             return State.STANDING;
         }
+    }
+
+    public void getPlayerInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L) && !getIsJumping()) {
+            body.applyLinearImpulse(new Vector2(0, jsp), body.getWorldCenter(), true);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && body.getLinearVelocity().x <= maxVel) {
+            body.applyLinearImpulse(new Vector2(ssp, 0), body.getWorldCenter(), true);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && body.getLinearVelocity().x >= -maxVel) {
+            body.applyLinearImpulse(new Vector2(-ssp, 0), body.getWorldCenter(), true);
+        }
+
+        if (body.getLinearVelocity().y > 0 || body.getLinearVelocity().y < 0) {
+            setIsJumping(true);
+        } else setIsJumping(false);
+    }
+
+    public boolean getIsJumping() {
+        return isJumping;
+    }
+
+    public void setIsJumping(boolean isJumping) {
+        this.isJumping = isJumping;
     }
 }

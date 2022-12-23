@@ -9,7 +9,7 @@ import com.mygdx.game.screens.PlayScreen;
 
 public class MarioGameTest extends Game {
 	public static final int FRAMES = 60;
-	public static final int V_WIDTH = 400, V_HEIGHT = 208;
+	public static final int V_WIDTH = 210, V_HEIGHT = 150;
 	public static final float PPM = 100;
 
 	// default values for filters
@@ -48,7 +48,7 @@ public class MarioGameTest extends Game {
 	public void render () {
 		super.render();
 	}
-	
+
 	@Override
 	public void dispose () {
 		super.dispose();
